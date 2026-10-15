@@ -92,7 +92,7 @@ const Dashboard = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            <Pill color="var(--cyan-primary)" size={28} />
+            <Pill color="var(--primary)" size={28} />
             Pharmacy Inventory Command Center
           </h1>
           <p className="page-subtitle">
@@ -196,7 +196,7 @@ const Dashboard = () => {
             <div
               style={{
                 display: 'flex',
-                background: 'rgba(255, 255, 255, 0.05)',
+                background: 'var(--bg-tertiary)',
                 padding: '3px',
                 borderRadius: '8px',
                 border: '1px solid var(--border-subtle)'
@@ -211,8 +211,8 @@ const Dashboard = () => {
                   fontSize: '0.78rem',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  backgroundColor: chartMode === 'top' ? 'var(--cyan-primary)' : 'transparent',
-                  color: chartMode === 'top' ? '#000000' : 'var(--text-secondary)',
+                  backgroundColor: chartMode === 'top' ? 'var(--primary)' : 'transparent',
+                  color: chartMode === 'top' ? '#ffffff' : 'var(--text-secondary)',
                   transition: 'all var(--transition-fast)'
                 }}
               >
@@ -227,8 +227,8 @@ const Dashboard = () => {
                   fontSize: '0.78rem',
                   fontWeight: 600,
                   cursor: 'pointer',
-                  backgroundColor: chartMode === 'least' ? '#f59e0b' : 'transparent',
-                  color: chartMode === 'least' ? '#000000' : 'var(--text-secondary)',
+                  backgroundColor: chartMode === 'least' ? 'var(--warning)' : 'transparent',
+                  color: chartMode === 'least' ? '#ffffff' : 'var(--text-secondary)',
                   transition: 'all var(--transition-fast)'
                 }}
               >
@@ -240,22 +240,23 @@ const Dashboard = () => {
           <div style={{ width: '100%', height: '280px' }}>
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={chartData} margin={{ top: 10, right: 10, left: -15, bottom: 25 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.06)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--border-subtle)" />
                 <XAxis
                   dataKey="name"
-                  stroke="#64748b"
+                  stroke="var(--text-muted)"
                   fontSize={11}
                   tickLine={false}
                   angle={-20}
                   textAnchor="end"
                 />
-                <YAxis stroke="#64748b" fontSize={11} tickLine={false} />
+                <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: '#0f172a',
-                    border: '1px solid rgba(255, 255, 255, 0.15)',
+                    backgroundColor: '#ffffff',
+                    border: '1px solid var(--border-subtle)',
                     borderRadius: '10px',
-                    color: '#ffffff',
+                    color: 'var(--text-primary)',
+                    boxShadow: '0 4px 12px rgba(0, 0, 0, 0.08)',
                     fontSize: '0.8rem'
                   }}
                   formatter={(val, name, item) => [
@@ -268,7 +269,7 @@ const Dashboard = () => {
                   {chartData.map((entry, index) => (
                     <Cell
                       key={`cell-${index}`}
-                      fill={chartMode === 'top' ? '#06b6d4' : '#f59e0b'}
+                      fill={chartMode === 'top' ? '#0F766E' : '#D97706'}
                     />
                   ))}
                 </Bar>
@@ -296,15 +297,15 @@ const Dashboard = () => {
                 justifyContent: 'space-between',
                 padding: '0.8rem 1rem',
                 borderRadius: '10px',
-                background: 'rgba(16, 185, 129, 0.08)',
-                border: '1px solid rgba(16, 185, 129, 0.2)'
+                background: 'var(--success-bg)',
+                border: '1px solid var(--success-border)'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                <CheckCircle2 size={18} color="#34d399" />
-                <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Normal Stocked</span>
+                <CheckCircle2 size={18} color="var(--success-text)" />
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--success-text)' }}>Normal Stocked</span>
               </div>
-              <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#34d399' }}>
+              <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--success-text)' }}>
                 {stats?.inStockCount ?? 0}
               </span>
             </div>
@@ -316,15 +317,15 @@ const Dashboard = () => {
                 justifyContent: 'space-between',
                 padding: '0.8rem 1rem',
                 borderRadius: '10px',
-                background: 'rgba(245, 158, 11, 0.08)',
-                border: '1px solid rgba(245, 158, 11, 0.2)'
+                background: 'var(--warning-bg)',
+                border: '1px solid var(--warning-border)'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                <AlertCircle size={18} color="#fbbf24" />
-                <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Low / Out of Stock</span>
+                <AlertCircle size={18} color="var(--warning-text)" />
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--warning-text)' }}>Low Stock</span>
               </div>
-              <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fbbf24' }}>
+              <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--warning-text)' }}>
                 {stats?.lowStockCount ?? 0}
               </span>
             </div>
@@ -336,15 +337,15 @@ const Dashboard = () => {
                 justifyContent: 'space-between',
                 padding: '0.8rem 1rem',
                 borderRadius: '10px',
-                background: 'rgba(244, 63, 94, 0.08)',
-                border: '1px solid rgba(244, 63, 94, 0.2)'
+                background: 'var(--danger-bg)',
+                border: '1px solid var(--danger-border)'
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem' }}>
-                <CalendarX size={18} color="#fb7185" />
-                <span style={{ fontSize: '0.875rem', fontWeight: 600 }}>Expired / In Quarantine</span>
+                <CalendarX size={18} color="var(--danger-text)" />
+                <span style={{ fontSize: '0.875rem', fontWeight: 600, color: 'var(--danger-text)' }}>Expired / Quarantined</span>
               </div>
-              <span style={{ fontSize: '1.1rem', fontWeight: 800, color: '#fb7185' }}>
+              <span style={{ fontSize: '1.1rem', fontWeight: 800, color: 'var(--danger-text)' }}>
                 {stats?.expiredCount ?? 0}
               </span>
             </div>
@@ -357,7 +358,7 @@ const Dashboard = () => {
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
-                color: 'var(--cyan-primary)',
+                color: 'var(--primary)',
                 fontSize: '0.85rem',
                 fontWeight: 600,
                 textDecoration: 'none'
@@ -394,13 +395,13 @@ const Dashboard = () => {
                   width: '32px',
                   height: '32px',
                   borderRadius: '8px',
-                  background: 'rgba(6, 182, 212, 0.15)',
+                  background: 'var(--primary-light)',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center'
                 }}
               >
-                <Sparkles size={18} color="var(--cyan-primary)" />
+                <Sparkles size={18} color="var(--primary)" />
               </div>
               <div>
                 <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--text-primary)' }}>
@@ -452,14 +453,14 @@ const Dashboard = () => {
                         <span
                           style={{
                             fontWeight: 700,
-                            color: s.currentStock === 0 ? '#fb7185' : '#fbbf24'
+                            color: s.currentStock === 0 ? 'var(--danger)' : 'var(--warning)'
                           }}
                         >
                           {s.currentStock} units
                         </span>
                       </td>
                       <td>
-                        <span style={{ fontWeight: 700, color: 'var(--cyan-primary)' }}>
+                        <span style={{ fontWeight: 700, color: 'var(--primary)' }}>
                           +{s.suggestedQuantity}
                         </span>
                       </td>
@@ -520,7 +521,7 @@ const Dashboard = () => {
                 Medicines at or below threshold
               </p>
             </div>
-            <Link to="/inventory" style={{ color: 'var(--cyan-primary)', fontSize: '0.8rem', textDecoration: 'none' }}>
+            <Link to="/inventory" style={{ color: 'var(--primary)', fontSize: '0.8rem', fontWeight: 600, textDecoration: 'none' }}>
               View All
             </Link>
           </div>
@@ -537,7 +538,7 @@ const Dashboard = () => {
                   style={{
                     padding: '0.85rem',
                     borderRadius: '10px',
-                    background: 'rgba(255, 255, 255, 0.02)',
+                    background: 'var(--bg-tertiary)',
                     border: '1px solid var(--border-subtle)',
                     display: 'flex',
                     justifyContent: 'space-between',
@@ -557,7 +558,7 @@ const Dashboard = () => {
                       style={{
                         fontSize: '0.95rem',
                         fontWeight: 800,
-                        color: alert.quantity === 0 ? '#fb7185' : '#fbbf24'
+                        color: alert.quantity === 0 ? 'var(--danger)' : 'var(--warning)'
                       }}
                     >
                       {alert.quantity} / {alert.reorderThreshold}

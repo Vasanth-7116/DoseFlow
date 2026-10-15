@@ -10,18 +10,22 @@ import {
   Mail,
   ArrowRight,
   ShieldAlert,
-  Sparkles
+  Sparkles,
+  Trash2,
+  PackageX
 } from 'lucide-react';
 import { getLowStockAlerts, getExpiryAlerts } from '../services/dashboardService';
+import { removeFromShelf } from '../services/medicineService';
 import { useInventory } from '../context/InventoryContext';
 
 const Alerts = () => {
   const navigate = useNavigate();
-  const { refreshIndex } = useInventory();
+  const { refreshIndex, triggerRefresh, showToast } = useInventory();
   const [activeTab, setActiveTab] = useState('all'); // 'all', 'low_stock', 'near_expiry', 'expired'
   const [lowStockAlerts, setLowStockAlerts] = useState([]);
   const [expiryAlerts, setExpiryAlerts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [actionLoading, setActionLoading] = useState(null);
 
   const fetchAlertsData = async () => {
     try {
@@ -37,6 +41,22 @@ const Alerts = () => {
       console.error(err);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRemoveFromShelf = async (id, name, qty) => {
+    try {
+      setActionLoading(id);
+      const res = await removeFromShelf(id);
+      if (res.success) {
+        showToast(res.message || `Removed ${qty} expired unit(s) of ${name} from shelf into Quarantine.`);
+        await fetchAlertsData();
+        triggerRefresh();
+      }
+    } catch (err) {
+      showToast(err.message, 'error');
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -67,7 +87,7 @@ const Alerts = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            <ShieldAlert color="#f43f5e" size={28} />
+            <ShieldAlert color="var(--danger)" size={28} />
             Clinical Alerts & Expiry Monitoring
           </h1>
           <p className="page-subtitle">
@@ -134,13 +154,13 @@ const Alerts = () => {
               width: '60px',
               height: '60px',
               borderRadius: '50%',
-              background: 'rgba(16, 185, 129, 0.15)',
+              background: 'var(--success-bg)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center'
             }}
           >
-            <Sparkles size={30} color="#34d399" />
+            <Sparkles size={30} color="var(--success-text)" />
           </div>
           <h3 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--text-primary)' }}>
             No Active Alerts in this Category
@@ -156,12 +176,6 @@ const Alerts = () => {
             const isNearExpiry = item.categoryType === 'near_expiry';
             const isLowStock = item.categoryType === 'low_stock';
 
-            const borderColor = isExpired
-              ? 'rgba(244, 63, 94, 0.4)'
-              : isLowStock && item.quantity === 0
-              ? 'rgba(244, 63, 94, 0.4)'
-              : 'rgba(245, 158, 11, 0.3)';
-
             return (
               <div
                 key={`${item._id}-${index}`}
@@ -169,7 +183,7 @@ const Alerts = () => {
                 style={{
                   padding: '1.4rem 1.6rem',
                   borderLeft: `4px solid ${
-                    isExpired || item.quantity === 0 ? '#f43f5e' : '#f59e0b'
+                    isExpired || item.quantity === 0 ? 'var(--danger)' : 'var(--warning)'
                   }`,
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -186,21 +200,21 @@ const Alerts = () => {
                       height: '46px',
                       borderRadius: '12px',
                       background: isExpired
-                        ? 'rgba(244, 63, 94, 0.15)'
+                        ? 'var(--danger-bg)'
                         : isLowStock
-                        ? 'rgba(245, 158, 11, 0.15)'
-                        : 'rgba(168, 85, 247, 0.15)',
+                        ? 'var(--warning-bg)'
+                        : 'rgba(124, 58, 237, 0.08)',
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center'
                     }}
                   >
                     {isExpired ? (
-                      <CalendarX size={24} color="#fb7185" />
+                      <CalendarX size={24} color="var(--danger)" />
                     ) : isLowStock ? (
-                      <AlertTriangle size={24} color="#fbbf24" />
+                      <AlertTriangle size={24} color="var(--warning)" />
                     ) : (
-                      <Clock size={24} color="#c084fc" />
+                      <Clock size={24} color="#7C3AED" />
                     )}
                   </div>
 
@@ -232,7 +246,7 @@ const Alerts = () => {
                       }}
                     >
                       <span>
-                        Batch: <strong style={{ color: 'var(--cyan-primary)' }}>{item.batchNo}</strong>
+                        Batch: <strong style={{ color: 'var(--primary)' }}>{item.batchNo}</strong>
                       </span>
                       <span>
                         Shelf: <strong style={{ color: 'var(--text-primary)' }}>{item.shelfLocation || 'Main'}</strong>
@@ -248,21 +262,74 @@ const Alerts = () => {
                 </div>
 
                 {/* Right Actions */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.65rem', flexWrap: 'wrap', justifyContent: 'flex-end' }}>
                   {isExpired ? (
-                    <span
-                      style={{
-                        padding: '0.4rem 0.85rem',
-                        borderRadius: '8px',
-                        background: 'rgba(244, 63, 94, 0.15)',
-                        color: '#fda4af',
-                        fontSize: '0.825rem',
-                        fontWeight: 600,
-                        border: '1px solid rgba(244, 63, 94, 0.3)'
-                      }}
-                    >
-                      Quarantined from Dispense
-                    </span>
+                    <>
+                      <span
+                        style={{
+                          padding: '0.35rem 0.75rem',
+                          borderRadius: '8px',
+                          background: 'var(--danger-bg)',
+                          color: 'var(--danger-text)',
+                          fontSize: '0.75rem',
+                          fontWeight: 600,
+                          border: '1px solid var(--danger-border)'
+                        }}
+                      >
+                        Quarantined from Dispense
+                      </span>
+
+                      {item.quantity > 0 ? (
+                        <button
+                          className="btn btn-secondary btn-sm"
+                          style={{
+                            borderColor: 'var(--danger-border)',
+                            color: 'var(--danger-text)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            gap: '5px'
+                          }}
+                          onClick={() => handleRemoveFromShelf(item._id, item.name, item.quantity)}
+                          disabled={actionLoading === item._id}
+                          title="Zero out expired inventory and decommission stock from active shelf to Quarantine"
+                        >
+                          <Trash2 size={14} />
+                          <span>{actionLoading === item._id ? 'Removing...' : 'Remove from Shelf'}</span>
+                        </button>
+                      ) : (
+                        <span
+                          style={{
+                            padding: '0.35rem 0.65rem',
+                            borderRadius: '6px',
+                            background: 'var(--bg-tertiary)',
+                            color: 'var(--text-muted)',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            border: '1px solid var(--border-subtle)'
+                          }}
+                        >
+                          Decommissioned (0 units)
+                        </span>
+                      )}
+
+                      <button
+                        className="btn btn-primary btn-sm"
+                        style={{ display: 'flex', alignItems: 'center', gap: '5px' }}
+                        onClick={() => {
+                          navigate('/purchases', {
+                            state: {
+                              prefillMedicineId: item._id,
+                              prefillSupplierId: item.supplierId?._id,
+                              prefillQuantity: Math.max(item.reorderThreshold * 2, 50),
+                              isExpiredRestock: true
+                            }
+                          });
+                        }}
+                      >
+                        <span>Restock New Batch</span>
+                        <ArrowRight size={14} />
+                      </button>
+                    </>
                   ) : (
                     <button
                       className="btn btn-primary btn-sm"

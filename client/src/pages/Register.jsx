@@ -68,7 +68,7 @@ const Register = () => {
         justifyContent: 'center',
         padding: '24px',
         position: 'relative',
-        background: 'radial-gradient(ellipse at top, #0f172a 0%, #0a0e17 100%)'
+        background: 'var(--bg-primary)'
       }}
     >
       {/* Background glow effects */}
@@ -80,7 +80,7 @@ const Register = () => {
           transform: 'translateX(-50%)',
           width: '500px',
           height: '500px',
-          background: 'radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(15, 118, 110, 0.05) 0%, transparent 70%)',
           pointerEvents: 'none'
         }}
       />
@@ -89,13 +89,11 @@ const Register = () => {
         style={{
           width: '100%',
           maxWidth: '480px',
-          background: 'var(--bg-card, rgba(17, 24, 39, 0.75))',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
-          borderRadius: '20px',
+          background: 'var(--surface)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: '18px',
           padding: '36px 32px',
-          boxShadow: 'var(--shadow-lg, 0 10px 30px rgba(0, 0, 0, 0.45)), 0 0 25px rgba(16, 185, 129, 0.12)',
+          boxShadow: 'var(--shadow-lg)',
           zIndex: 1,
           animation: 'fadeIn 0.3s ease-out'
         }}
@@ -108,11 +106,11 @@ const Register = () => {
               height: '56px',
               margin: '0 auto 16px',
               borderRadius: '16px',
-              background: 'var(--grad-teal-emerald, linear-gradient(135deg, #14b8a6 0%, #10b981 100%))',
+              background: 'var(--primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 8px 20px rgba(16, 185, 129, 0.35)'
+              boxShadow: '0 4px 14px rgba(15, 118, 110, 0.3)'
             }}
           >
             <Pill size={28} color="#ffffff" />
@@ -122,15 +120,13 @@ const Register = () => {
               fontSize: '1.75rem',
               fontWeight: 800,
               letterSpacing: '-0.02em',
-              background: 'linear-gradient(135deg, #ffffff 30%, #94a3b8 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: 'var(--text-primary)',
               marginBottom: '6px'
             }}
           >
             Create Staff Account
           </h1>
-          <p style={{ color: 'var(--text-secondary, #94a3b8)', fontSize: '0.9rem' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
             Register to access DoseFlow hospital inventory
           </p>
         </div>
@@ -144,9 +140,9 @@ const Register = () => {
               gap: '10px',
               padding: '12px 14px',
               borderRadius: '10px',
-              background: 'rgba(239, 68, 68, 0.12)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#f87171',
+              background: 'var(--danger-bg)',
+              border: '1px solid var(--danger-border)',
+              color: 'var(--danger-text)',
               fontSize: '0.875rem',
               marginBottom: '20px'
             }}
@@ -164,7 +160,7 @@ const Register = () => {
                 display: 'block',
                 fontSize: '0.825rem',
                 fontWeight: 600,
-                color: 'var(--text-secondary, #94a3b8)',
+                color: 'var(--text-secondary)',
                 marginBottom: '6px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em'
@@ -180,7 +176,7 @@ const Register = () => {
                   left: '14px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: 'var(--text-muted, #64748b)'
+                  color: 'var(--text-muted)'
                 }}
               />
               <input
@@ -193,12 +189,21 @@ const Register = () => {
                 style={{
                   width: '100%',
                   padding: '12px 14px 12px 42px',
-                  background: 'rgba(15, 23, 42, 0.6)',
-                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                  background: '#ffffff',
+                  border: '1px solid var(--border-input)',
                   borderRadius: '10px',
-                  color: '#ffffff',
+                  color: 'var(--text-primary)',
                   fontSize: '0.95rem',
-                  outline: 'none'
+                  outline: 'none',
+                  transition: 'border-color 0.2s, box-shadow 0.2s'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'var(--primary)';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(15, 118, 110, 0.16)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--border-input)';
+                  e.target.style.boxShadow = 'none';
                 }}
               />
             </div>
@@ -210,7 +215,7 @@ const Register = () => {
                 display: 'block',
                 fontSize: '0.825rem',
                 fontWeight: 600,
-                color: 'var(--text-secondary, #94a3b8)',
+                color: 'var(--text-secondary)',
                 marginBottom: '6px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em'
@@ -226,7 +231,7 @@ const Register = () => {
                   left: '14px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: 'var(--text-muted, #64748b)'
+                  color: 'var(--text-muted)'
                 }}
               />
               <input
@@ -239,12 +244,21 @@ const Register = () => {
                 style={{
                   width: '100%',
                   padding: '12px 14px 12px 42px',
-                  background: 'rgba(15, 23, 42, 0.6)',
-                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                  background: '#ffffff',
+                  border: '1px solid var(--border-input)',
                   borderRadius: '10px',
-                  color: '#ffffff',
+                  color: 'var(--text-primary)',
                   fontSize: '0.95rem',
-                  outline: 'none'
+                  outline: 'none',
+                  transition: 'border-color 0.2s, box-shadow 0.2s'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'var(--primary)';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(15, 118, 110, 0.16)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--border-input)';
+                  e.target.style.boxShadow = 'none';
                 }}
               />
             </div>
@@ -256,7 +270,7 @@ const Register = () => {
                 display: 'block',
                 fontSize: '0.825rem',
                 fontWeight: 600,
-                color: 'var(--text-secondary, #94a3b8)',
+                color: 'var(--text-secondary)',
                 marginBottom: '6px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em'
@@ -272,7 +286,7 @@ const Register = () => {
                   left: '14px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: 'var(--text-muted, #64748b)'
+                  color: 'var(--text-muted)'
                 }}
               />
               <input
@@ -286,12 +300,21 @@ const Register = () => {
                 style={{
                   width: '100%',
                   padding: '12px 42px 12px 42px',
-                  background: 'rgba(15, 23, 42, 0.6)',
-                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                  background: '#ffffff',
+                  border: '1px solid var(--border-input)',
                   borderRadius: '10px',
-                  color: '#ffffff',
+                  color: 'var(--text-primary)',
                   fontSize: '0.95rem',
-                  outline: 'none'
+                  outline: 'none',
+                  transition: 'border-color 0.2s, box-shadow 0.2s'
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = 'var(--primary)';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(15, 118, 110, 0.16)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = 'var(--border-input)';
+                  e.target.style.boxShadow = 'none';
                 }}
               />
               <button
@@ -304,7 +327,7 @@ const Register = () => {
                   transform: 'translateY(-50%)',
                   background: 'transparent',
                   border: 'none',
-                  color: 'var(--text-muted, #64748b)',
+                  color: 'var(--text-muted)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center'
@@ -321,7 +344,7 @@ const Register = () => {
                 display: 'block',
                 fontSize: '0.825rem',
                 fontWeight: 600,
-                color: 'var(--text-secondary, #94a3b8)',
+                color: 'var(--text-secondary)',
                 marginBottom: '6px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em'
@@ -337,7 +360,7 @@ const Register = () => {
                   left: '14px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: 'var(--text-muted, #64748b)'
+                  color: 'var(--text-muted)'
                 }}
               />
               <select
@@ -347,10 +370,10 @@ const Register = () => {
                 style={{
                   width: '100%',
                   padding: '12px 14px 12px 42px',
-                  background: '#0f172a',
-                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                  background: '#ffffff',
+                  border: '1px solid var(--border-input)',
                   borderRadius: '10px',
-                  color: '#ffffff',
+                  color: 'var(--text-primary)',
                   fontSize: '0.95rem',
                   outline: 'none',
                   cursor: 'pointer'
@@ -369,7 +392,7 @@ const Register = () => {
               marginTop: '10px',
               padding: '13px',
               borderRadius: '10px',
-              background: 'var(--grad-teal-emerald, linear-gradient(135deg, #14b8a6 0%, #10b981 100%))',
+              background: 'var(--primary)',
               color: '#ffffff',
               fontSize: '0.95rem',
               fontWeight: 600,
@@ -379,7 +402,7 @@ const Register = () => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              boxShadow: '0 4px 15px rgba(16, 185, 129, 0.35)',
+              boxShadow: '0 4px 14px rgba(15, 118, 110, 0.28)',
               opacity: loading ? 0.75 : 1
             }}
           >
@@ -403,14 +426,14 @@ const Register = () => {
             marginTop: '20px',
             textAlign: 'center',
             fontSize: '0.875rem',
-            color: 'var(--text-secondary, #94a3b8)'
+            color: 'var(--text-secondary)'
           }}
         >
           Already have an account?{' '}
           <Link
             to="/login"
             style={{
-              color: 'var(--teal-primary, #14b8a6)',
+              color: 'var(--primary)',
               fontWeight: 600,
               textDecoration: 'none'
             }}

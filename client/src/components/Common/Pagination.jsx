@@ -34,15 +34,16 @@ const Pagination = ({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '1rem 1.25rem',
-        borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+        borderTop: '1px solid var(--border-subtle)',
         flexWrap: 'wrap',
-        gap: '12px'
+        gap: '12px',
+        backgroundColor: 'var(--surface)'
       }}
     >
-      <div style={{ fontSize: '0.825rem', color: 'var(--text-secondary, #94a3b8)' }}>
-        Showing <strong style={{ color: '#ffffff' }}>{startItem}</strong> to{' '}
-        <strong style={{ color: '#ffffff' }}>{endItem}</strong> of{' '}
-        <strong style={{ color: '#ffffff' }}>{totalCount}</strong> entries
+      <div style={{ fontSize: '0.825rem', color: 'var(--text-secondary)' }}>
+        Showing <strong style={{ color: 'var(--text-primary)' }}>{startItem}</strong> to{' '}
+        <strong style={{ color: 'var(--text-primary)' }}>{endItem}</strong> of{' '}
+        <strong style={{ color: 'var(--text-primary)' }}>{totalCount}</strong> entries
       </div>
 
       <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
@@ -56,9 +57,9 @@ const Pagination = ({
             width: '34px',
             height: '34px',
             borderRadius: '8px',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
-            color: currentPage <= 1 ? 'var(--text-muted, #64748b)' : '#ffffff',
+            background: '#ffffff',
+            border: '1px solid var(--border-input)',
+            color: currentPage <= 1 ? 'var(--text-subtle)' : 'var(--text-primary)',
             cursor: currentPage <= 1 ? 'not-allowed' : 'pointer',
             transition: 'all 0.15s'
           }}
@@ -73,7 +74,7 @@ const Pagination = ({
                 key={`ellipsis-${idx}`}
                 style={{
                   padding: '0 6px',
-                  color: 'var(--text-muted, #64748b)',
+                  color: 'var(--text-muted)',
                   fontSize: '0.85rem'
                 }}
               >
@@ -90,17 +91,13 @@ const Pagination = ({
                 width: '34px',
                 height: '34px',
                 borderRadius: '8px',
-                background: isActive
-                  ? 'var(--grad-cyan-blue, linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%))'
-                  : 'rgba(255, 255, 255, 0.04)',
-                border: isActive
-                  ? '1px solid transparent'
-                  : '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
-                color: isActive ? '#ffffff' : 'var(--text-secondary, #94a3b8)',
+                background: isActive ? 'var(--primary)' : '#ffffff',
+                border: isActive ? '1px solid transparent' : '1px solid var(--border-input)',
+                color: isActive ? '#ffffff' : 'var(--text-primary)',
                 fontWeight: isActive ? 700 : 500,
                 fontSize: '0.85rem',
                 cursor: 'pointer',
-                boxShadow: isActive ? '0 2px 8px rgba(6, 182, 212, 0.35)' : 'none',
+                boxShadow: isActive ? '0 2px 6px rgba(15, 118, 110, 0.3)' : 'none',
                 transition: 'all 0.15s'
               }}
             >
@@ -119,9 +116,9 @@ const Pagination = ({
             width: '34px',
             height: '34px',
             borderRadius: '8px',
-            background: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
-            color: currentPage >= totalPages ? 'var(--text-muted, #64748b)' : '#ffffff',
+            background: '#ffffff',
+            border: '1px solid var(--border-input)',
+            color: currentPage >= totalPages ? 'var(--text-subtle)' : 'var(--text-primary)',
             cursor: currentPage >= totalPages ? 'not-allowed' : 'pointer',
             transition: 'all 0.15s'
           }}

@@ -63,11 +63,11 @@ const Sidebar = () => {
             width: '42px',
             height: '42px',
             borderRadius: '12px',
-            background: 'var(--grad-cyan-blue)',
+            background: 'var(--primary)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            boxShadow: 'var(--shadow-cyan)'
+            boxShadow: 'var(--shadow-primary)'
           }}
         >
           <Activity size={24} color="#ffffff" strokeWidth={2.5} />
@@ -79,12 +79,10 @@ const Sidebar = () => {
                 fontSize: '1.25rem',
                 fontWeight: 800,
                 letterSpacing: '-0.03em',
-                background: 'linear-gradient(to right, #ffffff, #93c5fd)',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent'
+                color: 'var(--text-primary)'
               }}
             >
-              DoseFlow
+              Dose<span style={{ color: 'var(--primary)' }}>Flow</span>
             </span>
           </div>
           <span
@@ -123,9 +121,9 @@ const Sidebar = () => {
                 gap: '0.85rem',
                 padding: '0.75rem 1rem',
                 borderRadius: '10px',
-                color: isActive ? '#ffffff' : 'var(--text-secondary)',
-                backgroundColor: isActive ? 'rgba(6, 182, 212, 0.14)' : 'transparent',
-                border: isActive ? '1px solid rgba(6, 182, 212, 0.3)' : '1px solid transparent',
+                color: isActive ? 'var(--primary)' : 'var(--text-secondary)',
+                backgroundColor: isActive ? 'var(--primary-light)' : 'transparent',
+                border: isActive ? '1px solid var(--primary-border)' : '1px solid transparent',
                 textDecoration: 'none',
                 fontWeight: isActive ? 600 : 500,
                 fontSize: '0.9rem',
@@ -137,7 +135,7 @@ const Sidebar = () => {
                 <>
                   <Icon
                     size={20}
-                    color={isActive ? 'var(--cyan-primary)' : 'currentColor'}
+                    color={isActive ? 'var(--primary)' : 'currentColor'}
                     strokeWidth={isActive ? 2.3 : 1.8}
                   />
                   <span style={{ flex: 1 }}>{item.label}</span>
@@ -149,9 +147,9 @@ const Sidebar = () => {
                         borderRadius: '9999px',
                         fontSize: '0.72rem',
                         fontWeight: 700,
-                        backgroundColor: '#f43f5e',
+                        backgroundColor: 'var(--danger)',
                         color: '#ffffff',
-                        boxShadow: '0 0 10px rgba(244, 63, 94, 0.5)'
+                        boxShadow: '0 2px 6px rgba(220, 38, 38, 0.3)'
                       }}
                     >
                       {item.badge}
@@ -171,13 +169,13 @@ const Sidebar = () => {
           style={{
             padding: '0.9rem',
             borderRadius: '12px',
-            border: '1px solid rgba(6, 182, 212, 0.2)',
-            background: 'linear-gradient(145deg, rgba(6, 182, 212, 0.08) 0%, rgba(59, 130, 246, 0.04) 100%)'
+            border: '1px solid var(--primary-border)',
+            background: 'var(--primary-light)'
           }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
-            <Sparkles size={16} color="var(--cyan-primary)" />
-            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--cyan-primary)' }}>
+            <Sparkles size={16} color="var(--primary)" />
+            <span style={{ fontSize: '0.78rem', fontWeight: 700, color: 'var(--primary)' }}>
               Smart Suggestion Engine
             </span>
           </div>

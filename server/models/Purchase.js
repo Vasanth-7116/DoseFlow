@@ -25,6 +25,9 @@ const purchaseSchema = new mongoose.Schema(
       trim: true,
       default: ''
     },
+    expiryDate: {
+      type: Date
+    },
     quantityPurchased: {
       type: Number,
       required: [true, 'Quantity purchased is required'],

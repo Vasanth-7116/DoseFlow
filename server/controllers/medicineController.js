@@ -185,3 +185,31 @@ export const deleteMedicine = async (req, res, next) => {
     next(err);
   }
 };
+
+// @desc    Remove expired/quarantined medicine from shelf (decommission expired stock)
+// @route   PUT /api/medicines/:id/remove-from-shelf
+export const removeFromShelf = async (req, res, next) => {
+  try {
+    const medicine = await Medicine.findById(req.params.id);
+    if (!medicine) {
+      return res.status(404).json({ success: false, message: 'Medicine not found' });
+    }
+
+    const previousQty = medicine.quantity;
+    medicine.quantity = 0;
+    medicine.shelfLocation = 'Quarantine Bay (Disposed)';
+    await medicine.save();
+
+    const populated = await Medicine.findById(medicine._id)
+      .populate('supplierId', 'name contactPerson email phone');
+
+    res.status(200).json({
+      success: true,
+      data: populated,
+      message: `Decommissioned ${previousQty} expired unit(s) of ${medicine.name}. Removed from active shelf into Quarantine Disposal.`
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+

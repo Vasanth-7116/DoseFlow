@@ -204,14 +204,14 @@ const Suppliers = () => {
                         width: '48px',
                         height: '48px',
                         borderRadius: '12px',
-                        background: 'rgba(6, 182, 212, 0.12)',
-                        border: '1px solid rgba(6, 182, 212, 0.3)',
+                        background: 'var(--primary-light)',
+                        border: '1px solid var(--primary-border)',
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'center'
                       }}
                     >
-                      <Building2 size={24} color="var(--cyan-primary)" />
+                      <Building2 size={24} color="var(--primary)" />
                     </div>
                     <div>
                       <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-primary)' }}>
@@ -251,17 +251,17 @@ const Suppliers = () => {
                     gap: '1rem',
                     padding: '0.85rem 1rem',
                     borderRadius: '10px',
-                    background: 'rgba(255, 255, 255, 0.02)',
+                    background: 'var(--bg-tertiary)',
                     border: '1px solid var(--border-subtle)'
                   }}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
-                    <Phone size={16} color="var(--teal-primary)" />
+                    <Phone size={16} color="var(--primary)" />
                     <span>{sup.phone}</span>
                   </div>
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.85rem' }}>
-                    <Mail size={16} color="var(--cyan-primary)" />
+                    <Mail size={16} color="var(--primary)" />
                     <span>{sup.email || 'No email provided'}</span>
                   </div>
 
@@ -303,7 +303,7 @@ const Suppliers = () => {
                 {isExpanded && (
                   <div
                     style={{
-                      background: 'rgba(15, 23, 42, 0.6)',
+                      background: 'var(--bg-tertiary)',
                       borderRadius: '10px',
                       padding: '1rem',
                       border: '1px solid var(--border-subtle)'
@@ -327,8 +327,8 @@ const Suppliers = () => {
                             style={{
                               padding: '0.65rem 0.85rem',
                               borderRadius: '8px',
-                              background: 'rgba(255, 255, 255, 0.03)',
-                              border: '1px solid rgba(255, 255, 255, 0.05)',
+                              background: '#ffffff',
+                              border: '1px solid var(--border-subtle)',
                               display: 'flex',
                               flexDirection: 'column',
                               gap: '0.25rem'
@@ -339,7 +339,7 @@ const Suppliers = () => {
                             </span>
                             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', color: 'var(--text-muted)' }}>
                               <span>Stock: {med.quantity}</span>
-                              <span style={{ color: 'var(--cyan-primary)' }}>${med.price?.toFixed(2)}</span>
+                              <span style={{ color: 'var(--primary)', fontWeight: 600 }}>${med.price?.toFixed(2)}</span>
                             </div>
                           </div>
                         ))}

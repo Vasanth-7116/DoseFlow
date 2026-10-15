@@ -179,7 +179,7 @@ const Sales = () => {
               gap: '0.5rem'
             }}
           >
-            <Receipt size={20} color="var(--cyan-primary)" />
+            <Receipt size={20} color="var(--primary)" />
             New Dispensing Transaction
           </h3>
 
@@ -226,7 +226,7 @@ const Sales = () => {
                   disabled
                   value={`$${unitPrice.toFixed(2)}`}
                   className="form-input"
-                  style={{ background: 'rgba(255, 255, 255, 0.03)', color: 'var(--cyan-primary)', fontWeight: 600 }}
+                  style={{ background: 'var(--bg-tertiary)', color: 'var(--primary)', fontWeight: 600 }}
                 />
               </div>
             </div>
@@ -264,9 +264,9 @@ const Sales = () => {
                   gap: '0.5rem',
                   padding: '0.75rem',
                   borderRadius: '8px',
-                  background: 'rgba(244, 63, 94, 0.1)',
-                  border: '1px solid rgba(244, 63, 94, 0.3)',
-                  color: '#fb7185',
+                  background: 'var(--danger-bg)',
+                  border: '1px solid var(--danger-border)',
+                  color: 'var(--danger-text)',
                   fontSize: '0.85rem',
                   marginBottom: '1rem'
                 }}
@@ -312,7 +312,7 @@ const Sales = () => {
             style={{
               padding: '1rem',
               borderRadius: '12px',
-              background: 'rgba(255, 255, 255, 0.02)',
+              background: 'var(--bg-tertiary)',
               border: '1px solid var(--border-subtle)',
               display: 'flex',
               flexDirection: 'column',
@@ -328,14 +328,14 @@ const Sales = () => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Batch Code:</span>
-              <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--cyan-primary)' }}>
+              <span style={{ fontFamily: 'var(--font-mono)', color: 'var(--primary)', fontWeight: 600 }}>
                 {selectedMedicine?.batchNo || '—'}
               </span>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Available On Shelf:</span>
-              <span style={{ fontWeight: 700, color: availableStock > 10 ? '#34d399' : '#fbbf24' }}>
+              <span style={{ fontWeight: 700, color: availableStock > 10 ? 'var(--success)' : 'var(--warning)' }}>
                 {availableStock} units
               </span>
             </div>
@@ -347,7 +347,7 @@ const Sales = () => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Remaining After Sale:</span>
-              <span style={{ fontWeight: 700, color: availableStock - quantity < 0 ? '#fb7185' : 'var(--text-primary)' }}>
+              <span style={{ fontWeight: 700, color: availableStock - quantity < 0 ? 'var(--danger)' : 'var(--text-primary)' }}>
                 {Math.max(0, availableStock - quantity)} units
               </span>
             </div>
@@ -357,8 +357,8 @@ const Sales = () => {
             style={{
               padding: '1.25rem',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, rgba(6, 182, 212, 0.1) 0%, rgba(59, 130, 246, 0.05) 100%)',
-              border: '1px solid rgba(6, 182, 212, 0.3)',
+              background: 'var(--primary-light)',
+              border: '1px solid var(--primary-border)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'baseline'
@@ -372,7 +372,7 @@ const Sales = () => {
               style={{
                 fontSize: '2rem',
                 fontWeight: 800,
-                color: 'var(--cyan-primary)',
+                color: 'var(--primary)',
                 letterSpacing: '-0.02em'
               }}
             >

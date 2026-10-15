@@ -9,7 +9,8 @@ import {
   AlertTriangle,
   Download,
   CheckCircle2,
-  Calendar
+  Calendar,
+  PackageX
 } from 'lucide-react';
 import Modal from '../components/Common/Modal';
 import StatusBadge from '../components/Common/StatusBadge';
@@ -18,7 +19,8 @@ import {
   getMedicines,
   createMedicine,
   updateMedicine,
-  deleteMedicine
+  deleteMedicine,
+  removeFromShelf
 } from '../services/medicineService';
 import { getSuppliers } from '../services/supplierService';
 import { useInventory } from '../context/InventoryContext';
@@ -195,6 +197,17 @@ const Inventory = () => {
     }
   };
 
+  const handleRemoveFromShelf = async (med) => {
+    try {
+      const res = await removeFromShelf(med._id);
+      showToast(res.message || `Decommissioned ${med.quantity} unit(s) of ${med.name} to Quarantine.`);
+      fetchInventory();
+      triggerRefresh();
+    } catch (err) {
+      showToast(err.message, 'error');
+    }
+  };
+
   // Export to CSV
   const handleExportCSV = () => {
     const headers = ['Name', 'Batch No', 'Category', 'Quantity', 'Price ($)', 'Expiry Date', 'Supplier', 'Threshold'];
@@ -225,7 +238,7 @@ const Inventory = () => {
       <div className="page-header">
         <div>
           <h1 className="page-title">
-            <Pill color="var(--cyan-primary)" size={28} />
+            <Pill color="var(--primary)" size={28} />
             Medicine Inventory Catalog
           </h1>
           <p className="page-subtitle">
@@ -391,6 +404,20 @@ const Inventory = () => {
                     </td>
                     <td style={{ textAlign: 'right' }}>
                       <div style={{ display: 'inline-flex', gap: '0.4rem' }}>
+                        {expiry <= new Date() && med.quantity > 0 && (
+                          <button
+                            onClick={() => handleRemoveFromShelf(med)}
+                            className="btn btn-secondary btn-sm"
+                            style={{
+                              padding: '0.35rem 0.6rem',
+                              color: 'var(--danger-text)',
+                              borderColor: 'var(--danger-border)'
+                            }}
+                            title="Decommission expired units from active shelf to Quarantine"
+                          >
+                            <PackageX size={14} />
+                          </button>
+                        )}
                         <button
                           onClick={() => handleOpenEditModal(med)}
                           className="btn btn-secondary btn-sm"

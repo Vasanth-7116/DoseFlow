@@ -8,7 +8,8 @@ import {
   FileCheck,
   Calendar,
   CheckCircle2,
-  Download
+  Download,
+  AlertTriangle
 } from 'lucide-react';
 import { getMedicines } from '../services/medicineService';
 import { getSuppliers } from '../services/supplierService';
@@ -30,13 +31,17 @@ const Purchases = () => {
   const [purTotalPages, setPurTotalPages] = useState(1);
   const [purTotalCount, setPurTotalCount] = useState(0);
 
-  // Form State (supports prefill from dashboard smart suggestion engine!)
+  // Form State (supports prefill from dashboard smart suggestion engine & alerts!)
   const [selectedMedicineId, setSelectedMedicineId] = useState(location.state?.prefillMedicineId || '');
   const [selectedSupplierId, setSelectedSupplierId] = useState(location.state?.prefillSupplierId || '');
   const [quantityPurchased, setQuantityPurchased] = useState(location.state?.prefillQuantity || 100);
   const [unitCost, setUnitCost] = useState(location.state?.prefillUnitCost || '');
   const [invoiceNo, setInvoiceNo] = useState(`INV-${Date.now().toString().slice(-6)}`);
   const [batchNo, setBatchNo] = useState('');
+  
+  // Default future expiry is 1 year from now
+  const defaultFutureExpiry = new Date(Date.now() + 365 * 86400000).toISOString().split('T')[0];
+  const [expiryDate, setExpiryDate] = useState(defaultFutureExpiry);
 
   const loadInitialData = async () => {
     try {
@@ -47,10 +52,26 @@ const Purchases = () => {
 
       if (medRes.success) {
         setMedicines(medRes.data);
-        if (!selectedMedicineId && medRes.data.length > 0) {
-          setSelectedMedicineId(medRes.data[0]._id);
-          setUnitCost(medRes.data[0].unitCost || Math.round(medRes.data[0].price * 0.7));
-          setBatchNo(medRes.data[0].batchNo);
+        const targetMed = selectedMedicineId
+          ? medRes.data.find((m) => m._id === selectedMedicineId)
+          : medRes.data[0];
+
+        if (targetMed) {
+          if (!selectedMedicineId) setSelectedMedicineId(targetMed._id);
+          if (!unitCost) setUnitCost(targetMed.unitCost || Math.round(targetMed.price * 0.7));
+
+          const isExpired = targetMed.expiryDate && new Date(targetMed.expiryDate) <= new Date();
+          if (isExpired || location.state?.isExpiredRestock) {
+            setBatchNo(`BATCH-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}`);
+            setExpiryDate(defaultFutureExpiry);
+          } else {
+            setBatchNo(targetMed.batchNo);
+            setExpiryDate(targetMed.expiryDate ? new Date(targetMed.expiryDate).toISOString().split('T')[0] : defaultFutureExpiry);
+          }
+
+          if (!selectedSupplierId && targetMed.supplierId) {
+            setSelectedSupplierId(targetMed.supplierId._id || targetMed.supplierId);
+          }
         }
       }
 
@@ -94,13 +115,14 @@ const Purchases = () => {
       showToast('No restock data to export', 'warning');
       return;
     }
-    const headers = ['Date', 'Medicine', 'Supplier', 'Invoice No', 'Batch', 'Qty Added', 'Unit Cost ($)', 'Total Cost ($)'];
+    const headers = ['Date', 'Medicine', 'Supplier', 'Invoice No', 'Batch', 'Expiry Date', 'Qty Added', 'Unit Cost ($)', 'Total Cost ($)'];
     const rows = purchaseHistory.map((p) => [
       new Date(p.date).toISOString().slice(0, 10),
       `"${p.medicineName || p.medicineId?.name || 'N/A'}"`,
       `"${p.supplierName || p.supplierId?.name || 'N/A'}"`,
       `"${p.invoiceNo || 'N/A'}"`,
       `"${p.batchNo || 'N/A'}"`,
+      p.expiryDate ? new Date(p.expiryDate).toISOString().slice(0, 10) : 'N/A',
       p.quantityPurchased,
       p.unitCost,
       p.totalCost
@@ -116,14 +138,21 @@ const Purchases = () => {
     document.body.removeChild(link);
   };
 
-  // When medicine changes, update default supplier and cost
+  // When medicine changes, update default supplier, cost, batch, and expiry date
   const handleMedicineChange = (e) => {
     const medId = e.target.value;
     setSelectedMedicineId(medId);
     const med = medicines.find((m) => m._id === medId);
     if (med) {
       setUnitCost(med.unitCost || Math.round(med.price * 0.7));
-      setBatchNo(med.batchNo);
+      const isExpired = med.expiryDate && new Date(med.expiryDate) <= new Date();
+      if (isExpired) {
+        setBatchNo(`BATCH-${new Date().getFullYear()}-${Date.now().toString().slice(-4)}`);
+        setExpiryDate(defaultFutureExpiry);
+      } else {
+        setBatchNo(med.batchNo);
+        setExpiryDate(med.expiryDate ? new Date(med.expiryDate).toISOString().split('T')[0] : defaultFutureExpiry);
+      }
       if (med.supplierId?._id) {
         setSelectedSupplierId(med.supplierId._id);
       }
@@ -132,6 +161,7 @@ const Purchases = () => {
 
   const currentMedicine = medicines.find((m) => m._id === selectedMedicineId);
   const currentSupplier = suppliers.find((s) => s._id === selectedSupplierId);
+  const isCurrentMedicineExpired = currentMedicine?.expiryDate && new Date(currentMedicine.expiryDate) <= new Date();
   const calculatedTotalCost = Number((quantityPurchased * (Number(unitCost) || 0)).toFixed(2));
 
   const handleRestockSubmit = async (e) => {
@@ -144,6 +174,10 @@ const Purchases = () => {
       showToast('Quantity must be greater than 0', 'error');
       return;
     }
+    if (!expiryDate) {
+      showToast('Shipment expiry date is required', 'error');
+      return;
+    }
 
     try {
       setSubmitting(true);
@@ -153,7 +187,8 @@ const Purchases = () => {
         quantityPurchased: Number(quantityPurchased),
         unitCost: Number(unitCost) || 0,
         invoiceNo: invoiceNo || `INV-${Date.now().toString().slice(-6)}`,
-        batchNo: batchNo || currentMedicine?.batchNo
+        batchNo: batchNo || currentMedicine?.batchNo,
+        expiryDate: expiryDate
       });
 
       if (res.success) {
@@ -206,7 +241,7 @@ const Purchases = () => {
               gap: '0.5rem'
             }}
           >
-            <Truck size={20} color="var(--cyan-primary)" />
+            <Truck size={20} color="var(--primary)" />
             Log Inbound Restock Shipment
           </h3>
 
@@ -272,27 +307,66 @@ const Purchases = () => {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
               <div className="form-group">
-                <label className="form-label">Supplier Invoice Reference</label>
-                <input
-                  type="text"
-                  placeholder="e.g. INV-APX-8492"
-                  value={invoiceNo}
-                  onChange={(e) => setInvoiceNo(e.target.value)}
-                  className="form-input"
-                />
-              </div>
-
-              <div className="form-group">
-                <label className="form-label">Shipment Batch Number</label>
+                <label className="form-label">Shipment Batch Number *</label>
                 <input
                   type="text"
                   placeholder="e.g. BATCH-2026-X"
+                  required
                   value={batchNo}
                   onChange={(e) => setBatchNo(e.target.value)}
                   className="form-input"
                 />
               </div>
+
+              <div className="form-group">
+                <label className="form-label">
+                  Batch Expiry Date *
+                </label>
+                <input
+                  type="date"
+                  required
+                  min={new Date().toISOString().split('T')[0]}
+                  value={expiryDate}
+                  onChange={(e) => setExpiryDate(e.target.value)}
+                  className="form-input"
+                />
+              </div>
             </div>
+
+            <div className="form-group">
+              <label className="form-label">Supplier Invoice Reference</label>
+              <input
+                type="text"
+                placeholder="e.g. INV-APX-8492"
+                value={invoiceNo}
+                onChange={(e) => setInvoiceNo(e.target.value)}
+                className="form-input"
+              />
+            </div>
+
+            {isCurrentMedicineExpired && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.65rem',
+                  padding: '0.75rem 1rem',
+                  borderRadius: '8px',
+                  background: 'var(--warning-bg)',
+                  border: '1px solid var(--warning-border)',
+                  color: 'var(--warning-text)',
+                  fontSize: '0.85rem',
+                  marginBottom: '1rem'
+                }}
+              >
+                <AlertTriangle size={18} style={{ flexShrink: 0 }} />
+                <span>
+                  <strong>Batch Renewal Notice:</strong> This medicine is currently flagged as expired/quarantined.
+                  Receiving this shipment will update the lot batch and renew expiration to{' '}
+                  <strong>{new Date(expiryDate).toLocaleDateString()}</strong>, restoring its status to <strong>In Stock</strong>.
+                </span>
+              </div>
+            )}
 
             <button
               type="submit"
@@ -323,7 +397,7 @@ const Purchases = () => {
             style={{
               padding: '1rem',
               borderRadius: '12px',
-              background: 'rgba(255, 255, 255, 0.02)',
+              background: 'var(--bg-tertiary)',
               border: '1px solid var(--border-subtle)',
               display: 'flex',
               flexDirection: 'column',
@@ -339,7 +413,7 @@ const Purchases = () => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Selected Vendor:</span>
-              <span style={{ color: 'var(--cyan-primary)' }}>
+              <span style={{ color: 'var(--primary)', fontWeight: 600 }}>
                 {currentSupplier?.name || 'None'}
               </span>
             </div>
@@ -351,7 +425,7 @@ const Purchases = () => {
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
               <span style={{ color: 'var(--text-secondary)' }}>Addition:</span>
-              <span style={{ fontWeight: 700, color: '#34d399' }}>+{quantityPurchased} units</span>
+              <span style={{ fontWeight: 700, color: 'var(--success)' }}>+{quantityPurchased} units</span>
             </div>
 
             <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.85rem' }}>
@@ -366,8 +440,8 @@ const Purchases = () => {
             style={{
               padding: '1.25rem',
               borderRadius: '12px',
-              background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.1) 0%, rgba(6, 182, 212, 0.05) 100%)',
-              border: '1px solid rgba(16, 185, 129, 0.3)',
+              background: 'var(--primary-light)',
+              border: '1px solid var(--primary-border)',
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'baseline'
@@ -381,7 +455,7 @@ const Purchases = () => {
               style={{
                 fontSize: '2rem',
                 fontWeight: 800,
-                color: '#34d399',
+                color: 'var(--primary)',
                 letterSpacing: '-0.02em'
               }}
             >
@@ -458,9 +532,14 @@ const Purchases = () => {
                         </span>
                       </td>
                       <td>
-                        <span style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
+                        <div style={{ fontFamily: 'var(--font-mono)', fontSize: '0.8rem' }}>
                           {p.batchNo || '—'}
-                        </span>
+                        </div>
+                        {p.expiryDate && (
+                          <div style={{ fontSize: '0.72rem', color: 'var(--text-muted)' }}>
+                            Exp: {new Date(p.expiryDate).toLocaleDateString()}
+                          </div>
+                        )}
                       </td>
                       <td>
                         <span style={{ fontWeight: 700, color: '#34d399' }}>+{p.quantityPurchased}</span>

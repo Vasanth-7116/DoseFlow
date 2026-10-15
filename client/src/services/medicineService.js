@@ -19,3 +19,8 @@ export const updateMedicine = (id, data) => {
 export const deleteMedicine = (id) => {
   return api.delete(`/medicines/${id}`);
 };
+
+export const removeFromShelf = (id) => {
+  return api.put(`/medicines/${id}/remove-from-shelf`);
+};
+

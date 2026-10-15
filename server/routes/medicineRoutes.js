@@ -5,7 +5,8 @@ import {
   getMedicineById,
   createMedicine,
   updateMedicine,
-  deleteMedicine
+  deleteMedicine,
+  removeFromShelf
 } from '../controllers/medicineController.js';
 import { protect, authorize } from '../middleware/auth.js';
 import { validateRequest } from '../middleware/validate.js';
@@ -32,5 +33,12 @@ router.route('/:id')
   .get(param('id').isMongoId().withMessage('Invalid medicine ID'), validateRequest, getMedicineById)
   .put(param('id').isMongoId().withMessage('Invalid medicine ID'), validateRequest, updateMedicine)
   .delete(param('id').isMongoId().withMessage('Invalid medicine ID'), validateRequest, authorize('admin'), deleteMedicine);
+
+router.put(
+  '/:id/remove-from-shelf',
+  param('id').isMongoId().withMessage('Invalid medicine ID'),
+  validateRequest,
+  removeFromShelf
+);
 
 export default router;

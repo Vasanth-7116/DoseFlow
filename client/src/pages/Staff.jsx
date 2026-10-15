@@ -283,15 +283,15 @@ const Staff = () => {
                             height: '38px',
                             borderRadius: '10px',
                             background: isAdmin
-                              ? 'linear-gradient(135deg, rgba(6, 182, 212, 0.25), rgba(59, 130, 246, 0.3))'
-                              : 'linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(6, 182, 212, 0.2))',
-                            border: `1px solid ${isAdmin ? 'rgba(6, 182, 212, 0.4)' : 'rgba(16, 185, 129, 0.4)'}`,
+                              ? 'rgba(124, 58, 237, 0.1)'
+                              : 'var(--primary-light)',
+                            border: `1px solid ${isAdmin ? 'rgba(124, 58, 237, 0.25)' : 'var(--primary-border)'}`,
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             fontWeight: 700,
                             fontSize: '0.85rem',
-                            color: isAdmin ? 'var(--cyan-primary)' : 'var(--teal-primary)'
+                            color: isAdmin ? '#7C3AED' : 'var(--primary)'
                           }}
                         >
                           {initials}
@@ -305,8 +305,8 @@ const Staff = () => {
                                   fontSize: '0.65rem',
                                   padding: '0.1rem 0.4rem',
                                   borderRadius: '4px',
-                                  backgroundColor: 'rgba(6, 182, 212, 0.15)',
-                                  color: 'var(--cyan-primary)',
+                                  backgroundColor: 'var(--primary-light)',
+                                  color: 'var(--primary)',
                                   fontWeight: 600,
                                   textTransform: 'uppercase'
                                 }}
@@ -339,9 +339,9 @@ const Staff = () => {
                           fontWeight: 700,
                           padding: '0.3rem 0.65rem',
                           borderRadius: '6px',
-                          backgroundColor: isAdmin ? 'rgba(6, 182, 212, 0.15)' : 'rgba(16, 185, 129, 0.12)',
-                          color: isAdmin ? 'var(--cyan-primary)' : 'var(--teal-primary)',
-                          border: `1px solid ${isAdmin ? 'rgba(6, 182, 212, 0.3)' : 'rgba(16, 185, 129, 0.3)'}`,
+                          backgroundColor: isAdmin ? 'rgba(124, 58, 237, 0.08)' : 'var(--primary-light)',
+                          color: isAdmin ? '#7C3AED' : 'var(--primary)',
+                          border: `1px solid ${isAdmin ? 'rgba(124, 58, 237, 0.25)' : 'var(--primary-border)'}`,
                           letterSpacing: '0.02em',
                           textTransform: 'uppercase'
                         }}
@@ -465,8 +465,8 @@ const Staff = () => {
             style={{
               padding: '0.85rem 1rem',
               borderRadius: '8px',
-              backgroundColor: 'rgba(6, 182, 212, 0.08)',
-              border: '1px solid rgba(6, 182, 212, 0.2)',
+              backgroundColor: 'var(--primary-light)',
+              border: '1px solid var(--primary-border)',
               fontSize: '0.8rem',
               color: 'var(--text-secondary)',
               marginTop: '0.5rem'

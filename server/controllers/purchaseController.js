@@ -43,7 +43,7 @@ export const getPurchases = async (req, res, next) => {
 // @route   POST /api/purchases
 export const createPurchase = async (req, res, next) => {
   try {
-    const { medicineId, supplierId, quantityPurchased, unitCost, invoiceNo, batchNo } = req.body;
+    const { medicineId, supplierId, quantityPurchased, unitCost, invoiceNo, batchNo, expiryDate, shelfLocation } = req.body;
 
     if (!medicineId || !supplierId || !quantityPurchased || quantityPurchased <= 0) {
       return res.status(400).json({
@@ -73,6 +73,15 @@ export const createPurchase = async (req, res, next) => {
     if (batchNo) {
       medicine.batchNo = batchNo;
     }
+    if (expiryDate) {
+      medicine.expiryDate = new Date(expiryDate);
+    }
+    if (shelfLocation) {
+      medicine.shelfLocation = shelfLocation;
+    } else if (medicine.shelfLocation && medicine.shelfLocation.toLowerCase().includes('quarantine')) {
+      // If medicine was moved to quarantine due to expiry, restore to standard active shelf
+      medicine.shelfLocation = 'Main Storage';
+    }
     await medicine.save();
 
     // Ensure medicine is in supplier's supplied list
@@ -90,6 +99,7 @@ export const createPurchase = async (req, res, next) => {
       unitCost: actualUnitCost,
       totalCost,
       batchNo: batchNo || medicine.batchNo,
+      expiryDate: expiryDate ? new Date(expiryDate) : medicine.expiryDate,
       invoiceNo: invoiceNo || `INV-${Date.now().toString().slice(-6)}`
     });
 

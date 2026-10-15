@@ -34,9 +34,7 @@ const Navbar = () => {
     <header
       style={{
         height: '70px',
-        backgroundColor: 'rgba(15, 23, 42, 0.7)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
+        backgroundColor: 'var(--surface)',
         borderBottom: '1px solid var(--border-subtle)',
         display: 'flex',
         alignItems: 'center',
@@ -50,7 +48,7 @@ const Navbar = () => {
       {/* Left: Department & Time */}
       <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-          <ShieldCheck size={18} color="var(--teal-primary)" />
+          <ShieldCheck size={18} color="var(--primary)" />
           <span style={{ fontSize: '0.85rem', fontWeight: 600, color: 'var(--text-primary)' }}>
             Central Hospital Pharmacy
           </span>
@@ -65,13 +63,13 @@ const Navbar = () => {
             gap: '0.4rem',
             padding: '0.3rem 0.75rem',
             borderRadius: '9999px',
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+            backgroundColor: 'var(--bg-tertiary)',
             border: '1px solid var(--border-subtle)',
             fontSize: '0.78rem',
             color: 'var(--text-secondary)'
           }}
         >
-          <Clock size={14} color="var(--cyan-primary)" />
+          <Clock size={14} color="var(--primary)" />
           <span>{currentDate}</span>
         </div>
       </div>
@@ -99,9 +97,9 @@ const Navbar = () => {
             width: '40px',
             height: '40px',
             borderRadius: '10px',
-            backgroundColor: alertCount > 0 ? 'rgba(244, 63, 94, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-            border: alertCount > 0 ? '1px solid rgba(244, 63, 94, 0.3)' : '1px solid var(--border-subtle)',
-            color: alertCount > 0 ? '#fb7185' : 'var(--text-secondary)',
+            backgroundColor: alertCount > 0 ? 'var(--danger-bg)' : 'var(--bg-tertiary)',
+            border: alertCount > 0 ? '1px solid var(--danger-border)' : '1px solid var(--border-subtle)',
+            color: alertCount > 0 ? 'var(--danger)' : 'var(--text-secondary)',
             textDecoration: 'none',
             transition: 'all var(--transition-fast)'
           }}
@@ -117,14 +115,14 @@ const Navbar = () => {
                 width: '18px',
                 height: '18px',
                 borderRadius: '50%',
-                backgroundColor: '#f43f5e',
+                backgroundColor: 'var(--danger)',
                 color: '#ffffff',
                 fontSize: '0.65rem',
                 fontWeight: 700,
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 0 8px rgba(244, 63, 94, 0.8)'
+                boxShadow: '0 2px 6px rgba(220, 38, 38, 0.4)'
               }}
             >
               {alertCount}
@@ -140,7 +138,7 @@ const Navbar = () => {
             gap: '0.65rem',
             padding: '0.35rem 0.6rem 0.35rem 0.4rem',
             borderRadius: '12px',
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
+            backgroundColor: 'var(--bg-primary)',
             border: '1px solid var(--border-subtle)'
           }}
         >
@@ -149,7 +147,7 @@ const Navbar = () => {
               width: '32px',
               height: '32px',
               borderRadius: '9px',
-              background: user?.role === 'admin' ? 'var(--grad-purple-pink)' : 'var(--grad-cyan-blue)',
+              background: user?.role === 'admin' ? 'var(--grad-purple-pink)' : 'var(--primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -170,7 +168,7 @@ const Navbar = () => {
                 fontWeight: 600,
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em',
-                color: user?.role === 'admin' ? '#a855f7' : '#38bdf8'
+                color: user?.role === 'admin' ? '#7C3AED' : 'var(--primary)'
               }}
             >
               {user?.role === 'admin' ? 'Administrator' : 'Staff Pharmacist'}
@@ -194,7 +192,7 @@ const Navbar = () => {
               justifyContent: 'center',
               transition: 'color 0.2s'
             }}
-            onMouseEnter={(e) => (e.currentTarget.style.color = '#f43f5e')}
+            onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--danger)')}
             onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--text-muted)')}
           >
             <LogOut size={16} />

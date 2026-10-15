@@ -74,7 +74,7 @@ const Login = () => {
         justifyContent: 'center',
         padding: '24px',
         position: 'relative',
-        background: 'radial-gradient(ellipse at top, #0f172a 0%, #0a0e17 100%)'
+        background: 'var(--bg-primary)'
       }}
     >
       {/* Background glow effects */}
@@ -86,7 +86,7 @@ const Login = () => {
           transform: 'translateX(-50%)',
           width: '500px',
           height: '500px',
-          background: 'radial-gradient(circle, rgba(6, 182, 212, 0.12) 0%, transparent 70%)',
+          background: 'radial-gradient(circle, rgba(15, 118, 110, 0.05) 0%, transparent 70%)',
           pointerEvents: 'none'
         }}
       />
@@ -95,13 +95,11 @@ const Login = () => {
         style={{
           width: '100%',
           maxWidth: '460px',
-          background: 'var(--bg-card, rgba(17, 24, 39, 0.75))',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
-          borderRadius: '20px',
+          background: 'var(--surface)',
+          border: '1px solid var(--border-subtle)',
+          borderRadius: '18px',
           padding: '36px 32px',
-          boxShadow: 'var(--shadow-lg, 0 10px 30px rgba(0, 0, 0, 0.45)), 0 0 25px rgba(6, 182, 212, 0.15)',
+          boxShadow: 'var(--shadow-lg)',
           zIndex: 1,
           animation: 'fadeIn 0.3s ease-out'
         }}
@@ -114,11 +112,11 @@ const Login = () => {
               height: '56px',
               margin: '0 auto 16px',
               borderRadius: '16px',
-              background: 'var(--grad-cyan-blue, linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%))',
+              background: 'var(--primary)',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 8px 20px rgba(6, 182, 212, 0.35)'
+              boxShadow: '0 4px 14px rgba(15, 118, 110, 0.3)'
             }}
           >
             <Pill size={28} color="#ffffff" />
@@ -128,15 +126,13 @@ const Login = () => {
               fontSize: '1.75rem',
               fontWeight: 800,
               letterSpacing: '-0.02em',
-              background: 'linear-gradient(135deg, #ffffff 30%, #94a3b8 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
+              color: 'var(--text-primary)',
               marginBottom: '6px'
             }}
           >
-            DoseFlow
+            Dose<span style={{ color: 'var(--primary)' }}>Flow</span>
           </h1>
-          <p style={{ color: 'var(--text-secondary, #94a3b8)', fontSize: '0.9rem' }}>
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem' }}>
             Hospital Medicine Inventory Intelligence
           </p>
         </div>
@@ -150,9 +146,9 @@ const Login = () => {
               gap: '10px',
               padding: '12px 14px',
               borderRadius: '10px',
-              background: 'rgba(239, 68, 68, 0.12)',
-              border: '1px solid rgba(239, 68, 68, 0.3)',
-              color: '#f87171',
+              background: 'var(--danger-bg)',
+              border: '1px solid var(--danger-border)',
+              color: 'var(--danger-text)',
               fontSize: '0.875rem',
               marginBottom: '20px'
             }}
@@ -163,14 +159,14 @@ const Login = () => {
         )}
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
           <div>
             <label
               style={{
                 display: 'block',
                 fontSize: '0.825rem',
                 fontWeight: 600,
-                color: 'var(--text-secondary, #94a3b8)',
+                color: 'var(--text-secondary)',
                 marginBottom: '6px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em'
@@ -186,7 +182,7 @@ const Login = () => {
                   left: '14px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: 'var(--text-muted, #64748b)'
+                  color: 'var(--text-muted)'
                 }}
               />
               <input
@@ -199,20 +195,20 @@ const Login = () => {
                 style={{
                   width: '100%',
                   padding: '12px 14px 12px 42px',
-                  background: 'rgba(15, 23, 42, 0.6)',
-                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                  background: '#ffffff',
+                  border: '1px solid var(--border-input)',
                   borderRadius: '10px',
-                  color: '#ffffff',
+                  color: 'var(--text-primary)',
                   fontSize: '0.95rem',
                   outline: 'none',
                   transition: 'border-color 0.2s, box-shadow 0.2s'
                 }}
                 onFocus={(e) => {
-                  e.target.style.borderColor = 'var(--cyan-primary, #06b6d4)';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(6, 182, 212, 0.2)';
+                  e.target.style.borderColor = 'var(--primary)';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(15, 118, 110, 0.16)';
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = 'var(--border-subtle, rgba(255, 255, 255, 0.08))';
+                  e.target.style.borderColor = 'var(--border-input)';
                   e.target.style.boxShadow = 'none';
                 }}
               />
@@ -225,7 +221,7 @@ const Login = () => {
                 display: 'block',
                 fontSize: '0.825rem',
                 fontWeight: 600,
-                color: 'var(--text-secondary, #94a3b8)',
+                color: 'var(--text-secondary)',
                 marginBottom: '6px',
                 textTransform: 'uppercase',
                 letterSpacing: '0.04em'
@@ -241,7 +237,7 @@ const Login = () => {
                   left: '14px',
                   top: '50%',
                   transform: 'translateY(-50%)',
-                  color: 'var(--text-muted, #64748b)'
+                  color: 'var(--text-muted)'
                 }}
               />
               <input
@@ -254,20 +250,20 @@ const Login = () => {
                 style={{
                   width: '100%',
                   padding: '12px 42px 12px 42px',
-                  background: 'rgba(15, 23, 42, 0.6)',
-                  border: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))',
+                  background: '#ffffff',
+                  border: '1px solid var(--border-input)',
                   borderRadius: '10px',
-                  color: '#ffffff',
+                  color: 'var(--text-primary)',
                   fontSize: '0.95rem',
                   outline: 'none',
                   transition: 'border-color 0.2s, box-shadow 0.2s'
                 }}
                 onFocus={(e) => {
-                  e.target.style.borderColor = 'var(--cyan-primary, #06b6d4)';
-                  e.target.style.boxShadow = '0 0 0 3px rgba(6, 182, 212, 0.2)';
+                  e.target.style.borderColor = 'var(--primary)';
+                  e.target.style.boxShadow = '0 0 0 3px rgba(15, 118, 110, 0.16)';
                 }}
                 onBlur={(e) => {
-                  e.target.style.borderColor = 'var(--border-subtle, rgba(255, 255, 255, 0.08))';
+                  e.target.style.borderColor = 'var(--border-input)';
                   e.target.style.boxShadow = 'none';
                 }}
               />
@@ -281,7 +277,7 @@ const Login = () => {
                   transform: 'translateY(-50%)',
                   background: 'transparent',
                   border: 'none',
-                  color: 'var(--text-muted, #64748b)',
+                  color: 'var(--text-muted)',
                   cursor: 'pointer',
                   display: 'flex',
                   alignItems: 'center'
@@ -299,7 +295,7 @@ const Login = () => {
               marginTop: '8px',
               padding: '13px',
               borderRadius: '10px',
-              background: 'var(--grad-cyan-blue, linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%))',
+              background: 'var(--primary)',
               color: '#ffffff',
               fontSize: '0.95rem',
               fontWeight: 600,
@@ -309,7 +305,7 @@ const Login = () => {
               alignItems: 'center',
               justifyContent: 'center',
               gap: '8px',
-              boxShadow: '0 4px 15px rgba(6, 182, 212, 0.35)',
+              boxShadow: '0 4px 14px rgba(15, 118, 110, 0.28)',
               transition: 'transform 0.15s, opacity 0.15s',
               opacity: loading ? 0.75 : 1
             }}
@@ -333,7 +329,7 @@ const Login = () => {
           style={{
             marginTop: '24px',
             paddingTop: '20px',
-            borderTop: '1px solid var(--border-subtle, rgba(255, 255, 255, 0.08))'
+            borderTop: '1px solid var(--border-subtle)'
           }}
         >
           <p
@@ -342,7 +338,7 @@ const Login = () => {
               fontWeight: 600,
               textTransform: 'uppercase',
               letterSpacing: '0.05em',
-              color: 'var(--text-muted, #64748b)',
+              color: 'var(--text-muted)',
               marginBottom: '10px',
               textAlign: 'center'
             }}
@@ -356,9 +352,9 @@ const Login = () => {
               style={{
                 padding: '9px 12px',
                 borderRadius: '8px',
-                background: 'rgba(6, 182, 212, 0.08)',
-                border: '1px solid rgba(6, 182, 212, 0.25)',
-                color: 'var(--cyan-primary, #06b6d4)',
+                background: 'var(--primary-light)',
+                border: '1px solid var(--primary-border)',
+                color: 'var(--primary)',
                 fontSize: '0.8rem',
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -377,9 +373,9 @@ const Login = () => {
               style={{
                 padding: '9px 12px',
                 borderRadius: '8px',
-                background: 'rgba(59, 130, 246, 0.08)',
-                border: '1px solid rgba(59, 130, 246, 0.25)',
-                color: 'var(--blue-primary, #3b82f6)',
+                background: 'var(--success-bg)',
+                border: '1px solid var(--success-border)',
+                color: 'var(--success-text)',
                 fontSize: '0.8rem',
                 fontWeight: 600,
                 cursor: 'pointer',
@@ -401,14 +397,14 @@ const Login = () => {
             marginTop: '20px',
             textAlign: 'center',
             fontSize: '0.875rem',
-            color: 'var(--text-secondary, #94a3b8)'
+            color: 'var(--text-secondary)'
           }}
         >
           Need a new staff account?{' '}
           <Link
             to="/register"
             style={{
-              color: 'var(--cyan-primary, #06b6d4)',
+              color: 'var(--primary)',
               fontWeight: 600,
               textDecoration: 'none'
             }}
